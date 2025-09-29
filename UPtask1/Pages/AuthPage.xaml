@@ -22,5 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <Button x:Name="btgLogin" Grid.Row="2" Grid.Column="1" Content="Войти" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgLogin_Click" />
+        <Button x:Name="btgtest" Grid.Row="2" Grid.Column="0" Content="рега" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgtest_Click"  />
+        <Button x:Name="btgtest2" Grid.Row="2" Grid.Column="2" Content="админка" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgtest2_Click"  />
     </Grid>
 </Page>

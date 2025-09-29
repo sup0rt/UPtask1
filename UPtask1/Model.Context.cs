@@ -20,8 +20,8 @@ namespace UPtask1
         {
         }
 
-        private static Entities _context;
-        public static Entities GetContext()
+        private Entities _context;
+        public Entities GetContext()
         {
             if (_context == null)
             {
@@ -29,7 +29,7 @@ namespace UPtask1
             }
             return _context;
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

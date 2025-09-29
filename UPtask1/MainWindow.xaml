@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UPtask1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Height="450" Width="800">
     <Grid>
-        
+        <Frame Source="pages/AuthPage.xaml" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

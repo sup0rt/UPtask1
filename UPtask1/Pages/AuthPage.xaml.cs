@@ -29,5 +29,15 @@ namespace UPtask1.Pages
         {
             NavigationService.Navigate(new StatisticsPage());
         }
+
+        private void btgtest_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new RegPage());
+        }
+
+        private void btgtest2_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminPage());
+        }
     }
 }

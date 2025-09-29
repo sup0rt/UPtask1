@@ -6,9 +6,21 @@
       xmlns:local="clr-namespace:UPtask1.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="RegPage">
+      Title="RegPage"
+      Style="{StaticResource PageStyle}">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="1" Grid.Column="1" Content="тут будет страница регистрации" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Page>
