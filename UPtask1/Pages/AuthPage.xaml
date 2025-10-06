@@ -6,23 +6,25 @@
       xmlns:local="clr-namespace:UPtask1.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AuthPage"
+      Title="Страница авторизации"
       Style="{StaticResource PageStyle}">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        
 
-        <Button x:Name="btgLogin" Grid.Row="2" Grid.Column="1" Content="Войти" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgLogin_Click" />
-        <Button x:Name="btgtest" Grid.Row="2" Grid.Column="0" Content="рега" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgtest_Click"  />
-        <Button x:Name="btgtest2" Grid.Row="2" Grid.Column="2" Content="админка" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgtest2_Click"  />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <Label Content="Логин" Style="{StaticResource LabelStyle}" />
+            <TextBox x:Name="TbUsername" Style="{StaticResource TextBoxStyle}" />
+            <Label Content="Пароль" Style="{StaticResource LabelStyle}" />
+            <PasswordBox x:Name="PbPassword" Style="{StaticResource PasswordBoxStyle}" />
+            <Button x:Name="btgLogin" Grid.Row="2" Grid.Column="1" Content="Войти" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgLogin_Click" Style="{StaticResource ButtonStyle}" />
+
+            <TextBlock Style="{StaticResource LinkTextBlockStyle}" >
+                Нет аккаунта? 
+                <Hyperlink  TextDecorations="Underline" Click="Hyperlink_Click" Style="{StaticResource HyperlinkStyle}" >
+                    Зарегистрируйтесь
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

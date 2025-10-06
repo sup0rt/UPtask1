@@ -25,19 +25,55 @@ namespace UPtask1.Pages
             InitializeComponent();
         }
 
+        private void Authorize()
+        {
+            if (string.IsNullOrWhiteSpace(TbUsername.Text) | string.IsNullOrEmpty(PbPassword.Password))
+            {
+                MessageBox.Show("Введите логин и пароль");
+                return;
+            }
+            var user = Entities.GetContext().Account.AsNoTracking().FirstOrDefault(u => u.Login == TbUsername.Text);
+            if (user == null)
+            {
+                MessageBox.Show("Пользователь с такими данными не найден");
+                return;
+            }
+            bool isValid = PasswordHasher.VerifyPassword(PbPassword.Password, user.Password, user.Salt);
+            if (!isValid)
+            {
+                MessageBox.Show("Неверный логин или пароль");
+                return;
+            }
+            else
+            {
+                TbUsername.Clear();
+                PbPassword.Clear();
+                if (user.Role == 1)
+                {
+                    MessageBox.Show("Добро пожаловать!");
+                    NavigationService.Navigate(new StatisticsPage(user));
+                }
+                else if (user.Role == 2)
+                {
+                    MessageBox.Show("Добро пожаловать!");
+                    NavigationService.Navigate(new AdminPage());
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка идентификации роли пользователя");
+                    return;
+                }
+            }
+        }
+
         private void btgLogin_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new StatisticsPage());
+            Authorize();
         }
 
-        private void btgtest_Click(object sender, RoutedEventArgs e)
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new RegPage());
-        }
-
-        private void btgtest2_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new AdminPage());
         }
     }
 }

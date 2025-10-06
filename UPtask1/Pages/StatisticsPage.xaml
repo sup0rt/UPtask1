@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:UPtask1.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="StatisticsPage"
+      Title="Страница пользователя"
       Style="{StaticResource PageStyle}">
 
     <Grid>

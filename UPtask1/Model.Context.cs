@@ -20,8 +20,8 @@ namespace UPtask1
         {
         }
 
-        private Entities _context;
-        public Entities GetContext()
+        private static Entities _context;
+        public static Entities GetContext()
         {
             if (_context == null)
             {
@@ -29,12 +29,12 @@ namespace UPtask1
             }
             return _context;
         }
-    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }

@@ -6,21 +6,26 @@
       xmlns:local="clr-namespace:UPtask1.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="RegPage"
+      Title="Страница регистрации"
       Style="{StaticResource PageStyle}">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <Label Grid.Row="1" Grid.Column="1" Content="тут будет страница регистрации" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <Label Content="Ваши ФИО"  HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" />
+            <TextBox x:Name="TbFullname" Style="{StaticResource TextBoxStyle}" />
+            <Label Content="Придумайте логин"  HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" />
+            <TextBox x:Name="TbUsername" Style="{StaticResource TextBoxStyle}" />
+            <Label Content="Придумайте пароль" HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" />
+            <PasswordBox x:Name="PbPassword" Style="{StaticResource PasswordBoxStyle}" />
+            <Label Content="Повторите пароль"  HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" />
+            <PasswordBox x:Name="PbPasswordCheck" Style="{StaticResource PasswordBoxStyle}" />
+            <Button x:Name="BtnRegister" Content="Зарегистрироваться" Click="BtnRegister_Click" Style="{StaticResource ButtonStyle}" />
+            <TextBlock Style="{StaticResource LinkTextBlockStyle}" >
+                Уже зарегестрированы? 
+                <Hyperlink  TextDecorations="Underline"  Style="{StaticResource HyperlinkStyle}" Click="Hyperlink_Click" >
+                    Войдите
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

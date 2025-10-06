@@ -20,9 +20,13 @@ namespace UPtask1.Pages
     /// </summary>
     public partial class StatisticsPage : Page
     {
-        public StatisticsPage()
+        private Account _currentUser;
+        public StatisticsPage(Account user)
         {
             InitializeComponent();
+            _currentUser = user;
         }
+
+       
     }
 }
