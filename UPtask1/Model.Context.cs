@@ -37,7 +37,6 @@ namespace UPtask1
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<User> User { get; set; }
     }
 }

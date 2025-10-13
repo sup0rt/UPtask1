@@ -78,17 +78,20 @@ namespace UPtask1.Pages
                 var context = Entities.GetContext();
 
                 _userAccount.Login = TbUsername.Text;
-                _user.FIO = TbFullname.Text;
                 _userAccount.Role = 1;
                 _userAccount.Password = PasswordHasher.CreateHash(PbPassword.Password, out string salt);
                 _userAccount.Salt = salt;
-
-
-                context.User.Add(_user);
                 context.Account.Add(_userAccount);
                 context.SaveChanges();
+
+                _user.FIO = TbFullname.Text;              
+                _user.Account = _userAccount.ID;
+                context.User.Add(_user);
+                context.SaveChanges();
+                
+                
                 MessageBox.Show("Вы зарегистрировались", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                NavigationService.Navigate(new StatisticsPage(_userAccount));
+                NavigationService.Navigate(new UserPage(_userAccount));
             }
             catch (DbEntityValidationException ex)
             {
@@ -101,7 +104,7 @@ namespace UPtask1.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка: " + ex, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

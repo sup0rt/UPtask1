@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UPtask1"
         mc:Ignorable="d"
         Height="450" Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Title="">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
@@ -16,7 +17,7 @@
 
 
         <Button  x:Name="btnExit" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Выйти" Style="{StaticResource ButtonStyle}" Click="btnExit_Click"  />
-        <Frame Grid.Row="1" Source="pages/AuthPage.xaml" NavigationUIVisibility="Hidden" />
+        <Frame x:Name="MainFrame" Grid.Row="1" Source="pages/AuthPage.xaml" NavigationUIVisibility="Hidden" />
         <TextBlock Grid.Row="2" x:Name="tbDateTimeNow" VerticalAlignment="Center" Text="" HorizontalAlignment="Right" Style="{StaticResource LinkTextBlockStyle}"  />
     </Grid>
 </Window>

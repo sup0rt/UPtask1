@@ -23,6 +23,27 @@ namespace UPtask1
         public MainWindow()
         {
             InitializeComponent();
+            var frame = (Frame)this.FindName("Frame");
+            MainFrame.Navigated += Frame_Navigated;
+        }
+        private void Frame_Navigated(object sender, NavigationEventArgs e)
+        {
+            var frame = sender as Frame;
+            if (frame.Content is Page page)
+            {
+                string pageName = page.GetType().Name;
+
+                if (pageName == "AuthPage")
+                    this.Title = "Страница авторизации";
+                else if (pageName == "RegPage")
+                    this.Title = "Страница регистрации";
+                else if (pageName == "AdminPage")
+                    this.Title = "Страница администратора";
+                else if (pageName == "UserPage")
+                    this.Title = "Страница пользователя";
+                else
+                    this.Title = pageName; 
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

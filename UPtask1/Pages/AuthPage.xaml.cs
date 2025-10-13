@@ -51,9 +51,9 @@ namespace UPtask1.Pages
                 if (user.Role == 1)
                 {
                     MessageBox.Show("Добро пожаловать!");
-                    NavigationService.Navigate(new StatisticsPage(user));
+                    NavigationService.Navigate(new UserPage(user));
                 }
-                else if (user.Role == 2)
+                else if (user.Role == 0)
                 {
                     MessageBox.Show("Добро пожаловать!");
                     NavigationService.Navigate(new AdminPage());
@@ -75,5 +75,7 @@ namespace UPtask1.Pages
         {
             NavigationService.Navigate(new RegPage());
         }
+
+        
     }
 }
