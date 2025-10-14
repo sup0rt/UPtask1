@@ -10,17 +10,19 @@
       Style="{StaticResource PageStyle}">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <Label Grid.Row="1" Grid.Column="1" Content="тут будет страница админа" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="BtnTab1" Content="Таблица пользователей" 
+HorizontalAlignment="Center" VerticalAlignment="Top"  
+Click="BtnTab1_Click" Style="{StaticResource ButtonStyle}" />
+        <Button x:Name="BtnTab2" Content="Таблица категорий" 
+HorizontalAlignment="Center" VerticalAlignment="Top"  
+Click="BtnTab2_Click" Style="{StaticResource ButtonStyle}" />
+        <Button x:Name="BtnTab3" Content="Таблица платежей" 
+HorizontalAlignment="Center" VerticalAlignment="Top"  
+Click="BtnTab3_Click" Style="{StaticResource ButtonStyle}" />
+        <Button x:Name="BtnTab4" Content="Диаграммы" 
+HorizontalAlignment="Center" VerticalAlignment="Top"  
+Click="BtnTab4_Click" Style="{StaticResource ButtonStyle}" />
+        </StackPanel>
     </Grid>
 </Page>

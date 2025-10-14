@@ -41,6 +41,14 @@ namespace UPtask1
                     this.Title = "Страница администратора";
                 else if (pageName == "UserPage")
                     this.Title = "Страница пользователя";
+                else if (pageName == "UserTabPage")
+                    this.Title = "Страница таблицы пользователей";
+                else if (pageName == "AdminTabPage")
+                    this.Title = "Страница таблицы администраторов";
+                else if (pageName == "PaymentTabPage")
+                    this.Title = "Страница таблицы оплат";
+                else if (pageName == "DiagrammTabPage")
+                    this.Title = "Страница диаграмм";
                 else
                     this.Title = pageName; 
             }
