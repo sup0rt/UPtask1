@@ -1,59 +1,76 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Data.Entity;
 
 namespace UPtask1.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для AddCategoryPage.xaml
-    /// </summary>
     public partial class AddCategoryPage : Page
     {
-        private Category _currentCategory = new Category();
+        private Category _currentCategory;
+
+        public Category CurrentCategory => _currentCategory;
+
         public AddCategoryPage(Category selectedCategory)
         {
             InitializeComponent();
+
             if (selectedCategory != null)
-                _currentCategory = selectedCategory;
-            DataContext = _currentCategory;
+            {
+                _currentCategory = Entities.GetContext().Category
+                    .Include(c => c.Payment)
+                    .FirstOrDefault(c => c.ID == selectedCategory.ID) ?? selectedCategory;
+            }
+            else
+            {
+                _currentCategory = new Category();
+            }
+
+            DataContext = this;
         }
-        private void ButtonSaveCategory_Click(object sender, RoutedEventArgs
-       e)
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
+
             if (string.IsNullOrWhiteSpace(_currentCategory.Name))
                 errors.AppendLine("Укажите название категории!");
+
             if (errors.Length > 0)
             {
-                MessageBox.Show(errors.ToString());
+                MessageBox.Show(errors.ToString(), "Ошибки валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (_currentCategory.ID == 0)
-                Entities.GetContext().Category.Add(_currentCategory);
+
             try
             {
-                Entities.GetContext().SaveChanges();
-                MessageBox.Show("Данные успешно сохранены!");
+                var context = Entities.GetContext();
+
+                if (_currentCategory.ID == 0)
+                {
+                    context.Category.Add(_currentCategory);
+                }
+                else
+                {
+                    context.Entry(_currentCategory).State = EntityState.Modified;
+                }
+
+                context.SaveChanges();
+                MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                NavigationService?.GoBack();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void ButtonClean_Click(object sender, RoutedEventArgs e)
         {
-            TBCategoryName.Text = "";
+            TBName.Text = "";
+            _currentCategory.Name = "";
         }
     }
 }

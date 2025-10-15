@@ -1,78 +1,108 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Data.Entity;
 
 namespace UPtask1.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для PaymentTabPage.xaml
-    /// </summary>
     public partial class PaymentTabPage : Page
     {
         public PaymentTabPage()
         {
             InitializeComponent();
-            DataGridPayment.ItemsSource =
-           Entities.GetContext().Payment.ToList();
+            LoadData();
             this.IsVisibleChanged += Page_IsVisibleChanged;
         }
-        private void Page_IsVisibleChanged(object sender,
-       DependencyPropertyChangedEventArgs e)
+
+        private void LoadData()
+        {
+            try
+            {
+                // Загрузка платежей с данными User и Category
+                DataGridPayment.ItemsSource = Entities.GetContext()
+                    .Payment
+                    .Include(p => p.User1)
+                    .Include(p => p.Category1)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+            }
+        }
+
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (Visibility == Visibility.Visible)
             {
-                Entities.GetContext().ChangeTracker.Entries().ToList().ForEach(x
-               => x.Reload());
-                DataGridPayment.ItemsSource =
-               Entities.GetContext().Payment.ToList();
-            }
-        }
-        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new AddPaymentPage(null));
-        }
-        private void ButtonDel_Click(object sender, RoutedEventArgs e)
-        {
-            var paymentForRemoving =
-           DataGridPayment.SelectedItems.Cast<Payment>().ToList();
-            if (MessageBox.Show($"Вы точно хотите удалить записи в количестве { paymentForRemoving.Count()} элементов ? ", "Внимание", 
-       MessageBoxButton.YesNo, MessageBoxImage.Question) ==
-       MessageBoxResult.Yes)
- {
                 try
                 {
-
-                    Entities.GetContext().Payment.RemoveRange(paymentForRemoving);
-                    Entities.GetContext().SaveChanges();
-                    MessageBox.Show("Данные успешно удалены!");
-                    DataGridPayment.ItemsSource =
-                   Entities.GetContext().Payment.ToList();
+                    Entities.GetContext().ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
+                    LoadData();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message.ToString());
+                    MessageBox.Show($"Ошибка обновления данных: {ex.Message}");
                 }
             }
         }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                NavigationService?.Navigate(new AddPaymentPage(null));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка перехода на страницу добавления: {ex.Message}");
+            }
+        }
+
+        private void ButtonDel_Click(object sender, RoutedEventArgs e)
+        {
+            var paymentsForRemoving = DataGridPayment.SelectedItems.Cast<Payment>().ToList();
+            if (!paymentsForRemoving.Any())
+            {
+                MessageBox.Show("Пожалуйста, выберите хотя бы один платеж для удаления.", "Предупреждение",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (MessageBox.Show($"Вы уверены, что хотите удалить {paymentsForRemoving.Count} платеж(ей)?",
+                "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Entities.GetContext().Payment.RemoveRange(paymentsForRemoving);
+                    Entities.GetContext().SaveChanges();
+                    MessageBox.Show("Платежи успешно удалены!");
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка удаления платежей: {ex.Message}");
+                }
+            }
+        }
+
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Pages.AddPaymentPage((sender as
-           Button).DataContext as Payment));
-        }
-        private void ButtonBack_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new AdminPage());
+            try
+            {
+                var button = sender as Button;
+                var payment = button?.DataContext as Payment;
+                if (payment != null)
+                {
+                    NavigationService?.Navigate(new AddPaymentPage(payment));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка перехода на страницу редактирования: {ex.Message}");
+            }
         }
     }
 }

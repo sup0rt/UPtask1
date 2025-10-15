@@ -8,74 +8,53 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddUserPage" Style="{StaticResource PageStyle}">
 
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Логин"
-                   Grid.Row="0"
-                   Grid.Column="0"
-                   Margin="10,0,0,0"
-                   FontSize="20" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBlock Text="Пароль"
-                   Grid.Row="1"
-                   Grid.Column="0"
-                   Margin="10,0,0,0"
-                   FontSize="20" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBlock Text="ФИО"
-                   Grid.Row="2"
-                   Grid.Column="0"
-                   Margin="10,0,0,0"
-                   FontSize="20" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBlock Text="Фото"
-                   Grid.Row="3"
-                   Grid.Column="0"
-                   Margin="10,0,0,0"
-                   FontSize="20" Height="75" VerticalAlignment="Bottom" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBox x:Name="TBLogin"
-                 Grid.Row="0"
-                 ToolTip="Введите логин"
-                 Grid.Column="1"
-                 Margin="156,5,71,5" Style="{StaticResource TextBoxStyle}"/>
-        <TextBox x:Name="TBPass"
-                 Grid.Row="1"
-                 ToolTip="Введите пароль"
-                 Grid.Column="1"
-                 Margin="156,5,71,5" Style="{StaticResource TextBoxStyle}"/>
-        <TextBox x:Name="TBFio"
-                 Text="{Binding FIO}"
-                 Grid.Row="2"
-                 ToolTip="Введите ФИО"
-                 Grid.Column="1"
-                 Margin="156,5,71,5" Style="{StaticResource TextBoxStyle}"/>
-        <TextBox x:Name="TBPhoto"
-                 Text="{Binding Photo}"
-                 Grid.Row="3"
-                 ToolTip="Добавьте фото"
-                 Grid.Column="1"
-                 Margin="156,5,71,5" TextChanged="TBPhoto_TextChanged" />
-        <Button x:Name="ButtonSave"
-                Content="Сохранить"
-                Grid.Row="4"
-                Click="ButtonSave_Click"
-                Grid.ColumnSpan="2"
-                Margin="0,0,50,0"
-                HorizontalAlignment="Right" Style="{StaticResource ButtonStyle}"/>
-        <Button x:Name="ButtonClean"
-                Content="Очистить"
-                Grid.Row="4"
-                Click="ButtonClean_Click"
-                Grid.ColumnSpan="2"
-                Margin="50,0,0,0"
-                HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}"/>
+
+        <!-- Поля для Account -->
+        <TextBlock Text="Логин" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="TBLogin" Grid.Row="0" Grid.Column="1" Margin="5" ToolTip="Введите логин" 
+                 Text="{Binding CurrentAccount.Login, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Text="Пароль" Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="TBPass" Grid.Row="1" Grid.Column="1" Margin="5" ToolTip="Введите пароль" 
+                 Text="{Binding CurrentAccount.Password, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Text="Роль" Grid.Row="2" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <ComboBox x:Name="cmbRole" Grid.Row="2" Grid.Column="1" Margin="5" ToolTip="Выберите роль" 
+                  SelectedValue="{Binding CurrentAccount.Role, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedValuePath="Content">
+            <ComboBoxItem>Admin</ComboBoxItem>
+            <!-- Убрал Content="1", используем только содержимое -->
+            <ComboBoxItem>User</ComboBoxItem>
+            <!-- Убрал Content="2" -->
+        </ComboBox>
+
+        <!-- Поля для User -->
+        <TextBlock Text="ФИО" Grid.Row="3" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="TBFio" Grid.Row="3" Grid.Column="1" Margin="5" ToolTip="Введите ФИО" 
+                 Text="{Binding CurrentUser.FIO, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Text="Фото (необязательно)" Grid.Row="4" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="TBPhoto" Grid.Row="4" Grid.Column="1" Margin="5" ToolTip="Путь к фото" 
+                 Text="{Binding CurrentUser.Photo, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click"/>
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click"/>
+        </StackPanel>
     </Grid>
 </Page>

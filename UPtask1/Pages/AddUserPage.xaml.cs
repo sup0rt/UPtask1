@@ -3,132 +3,114 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
+using System.Data.Entity;
 
 namespace UPtask1.Pages
 {
     public partial class AddUserPage : Page
     {
-        private User _currentUser = new User();
-        private Account _currentAccount = null; // Связанный аккаунт
+        private User _currentUser;
+        private Account _currentAccount;
+
+        public User CurrentUser => _currentUser;
+        public Account CurrentAccount => _currentAccount;
 
         public AddUserPage(User selectedUser)
         {
             InitializeComponent();
 
-            // Если передан существующий пользователь, редактируем его
             if (selectedUser != null)
             {
-                _currentUser = selectedUser;
-                _currentAccount = selectedUser.Account1; // Загружаем связанный аккаунт
+                _currentUser = Entities.GetContext().User
+                    .Include(u => u.Account1)
+                    .FirstOrDefault(u => u.ID == selectedUser.ID) ?? selectedUser;
             }
             else
             {
-                _currentAccount = new Account(); // Новый аккаунт для нового пользователя
+                _currentUser = new User();
+                _currentAccount = new Account();
+                _currentUser.Account1 = _currentAccount;
             }
 
-            DataContext = _currentUser;
+            _currentAccount = _currentUser.Account1 ?? new Account();
+            _currentUser.Account1 = _currentAccount;
 
-            // Установка значений для полей Account
-            if (_currentAccount != null)
-            {
-                TBLogin.Text = _currentAccount.Login;
-                TBPass.Text = _currentAccount.Password;
-            }
+            DataContext = this;
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
 
-            // Валидация полей User
+            // Валидация Account
+            if (string.IsNullOrWhiteSpace(_currentAccount.Login))
+                errors.AppendLine("Укажите логин!");
+            if (string.IsNullOrWhiteSpace(_currentAccount.Password))
+                errors.AppendLine("Укажите пароль!");
+            if (_currentAccount.Role == null)
+            {
+                // Преобразуем выбранную роль в int (например, Admin = 1, User = 2)
+                var selectedRole = cmbRole.SelectedItem as ComboBoxItem;
+                if (selectedRole != null)
+                {
+                    _currentAccount.Role = selectedRole.Content.ToString() == "Admin" ? 1 : 2;
+                }
+                else
+                {
+                    errors.AppendLine("Выберите роль!");
+                }
+            }
+
+            // Валидация User
             if (string.IsNullOrWhiteSpace(_currentUser.FIO))
                 errors.AppendLine("Укажите ФИО!");
-            if (string.IsNullOrWhiteSpace(_currentUser.Photo))
-                errors.AppendLine("Укажите путь к фото!");
-
-            // Валидация полей Account
-            if (string.IsNullOrWhiteSpace(TBLogin.Text))
-                errors.AppendLine("Укажите логин!");
-            if (string.IsNullOrWhiteSpace(TBPass.Text))
-                errors.AppendLine("Укажите пароль!");
-
-            // Проверка уникальности логина
-            var context = Entities.GetContext();
-            if (context == null)
-            {
-                MessageBox.Show("Ошибка: Контекст базы данных не инициализирован.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (context.Account.Any(a => a.Login == TBLogin.Text && a.ID != _currentAccount.ID))
-            {
-                errors.AppendLine("Логин уже занят!");
-            }
 
             if (errors.Length > 0)
             {
-                MessageBox.Show(errors.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errors.ToString(), "Ошибки валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             try
             {
-                // Обновление данных Account
-                _currentAccount.Login = TBLogin.Text;
-                _currentAccount.Password = TBPass.Text; // В реальном приложении используйте хеширование
-                _currentAccount.Salt = null; // Если Salt не используется, устанавливаем null
+                var context = Entities.GetContext();
+                _currentAccount.Password = PasswordHasher.CreateHash(TBPass.Text, out string salt);
+                _currentAccount.Salt = salt;
 
-                // Если это новый аккаунт, добавляем его
-                if (_currentAccount.ID == 0)
-                {
-                    context.Account.Add(_currentAccount);
-                    context.SaveChanges(); // Сохраняем аккаунт, чтобы получить ID
-                }
-                else
-                {
-                    context.Entry(_currentAccount).State = System.Data.Entity.EntityState.Modified;
-                }
-
-                // Установка внешнего ключа в User
-                _currentUser.Account = _currentAccount.ID;
-
-                // Если это новый пользователь, добавляем его
                 if (_currentUser.ID == 0)
                 {
+                    context.Account.Add(_currentAccount);
                     context.User.Add(_currentUser);
                 }
                 else
                 {
-                    context.Entry(_currentUser).State = System.Data.Entity.EntityState.Modified;
+                    context.Entry(_currentAccount).State = EntityState.Modified;
+                    context.Entry(_currentUser).State = EntityState.Modified;
                 }
 
                 context.SaveChanges();
                 MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                NavigationService?.GoBack(); // Возврат на предыдущую страницу
+                NavigationService?.GoBack();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ButtonClean_Click(object sender, RoutedEventArgs e)
         {
-            // Очистка полей формы
-            TBFio.Text = string.Empty;
-            TBPhoto.Text = string.Empty;
-            TBLogin.Text = string.Empty;
-            TBPass.Text = string.Empty;
+            TBLogin.Text = "";
+            TBPass.Text = "";
+            cmbRole.SelectedIndex = -1;
+            TBFio.Text = "";
+            TBPhoto.Text = "";
 
-            // Сброс объектов
-            _currentUser = new User();
-            _currentAccount = new Account();
-            DataContext = _currentUser;
-        }
-
-        private void TBPhoto_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            _currentAccount.Login = "";
+            _currentAccount.Password = "";
+            _currentAccount.Role = null;
+            _currentUser.FIO = "";
+            _currentUser.Photo = "";
         }
     }
 }

@@ -4,51 +4,51 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UPtask1.Pages"
+      xmlns:context="clr-namespace:UPtask1"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddPaymentPage" Style="{StaticResource PageStyle}">
 
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Название платежа" Grid.Row="0" FontSize="20" 
-Margin="17,19,569,102" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBox x:Name="TBPaymentName"
- Grid.Row="0"
- Margin="400,26,48,95"
- Text="{Binding Name}" />
-        <TextBlock Text="Сумма" FontSize="20" Margin="17,68,615,51" Style="{StaticResource LinkTextBlockStyle}"/>
-        <TextBox x:Name="TBAmount"
- Margin="400,75,48,45"
- Text="{Binding Price}" />
-        <Button x:Name="ButtonSave" Content="Сохранить" Grid.Row="2" 
-Click="ButtonSave_Click" Margin="11,105,447,10"/>
-        <Button x:Name="ButtonClean" Content="Очистить" Grid.Row="2" 
-Click="ButtonClean_Click" Margin="448,105,10,10"/>
-        <TextBlock Grid.Row="1" FontSize="20" Margin="17,10,567,108"><Run 
-Language="ru-ru" Text="Количество"/></TextBlock>
-        <TextBox x:Name="TBCount"
- Grid.Row="1"
- Margin="400,10,48,109"
- Text="{Binding Num}" />
-        <TextBlock Grid.Row="1" FontSize="20" Margin="27,62,618,57"><Run 
-Language="ru-ru" Text="Дата"/></TextBlock>
-        <TextBox x:Name="TBDate" Grid.Row="1" Margin="400,62,48,57"
- Text="{Binding Date}"/>
-        <ComboBox x:Name="CBUser" Grid.Row="1" Margin="400,109,48,10"
- SelectedValuePath="ID"
- SelectedValue="{Binding Path=UserID}" />
-        <ComboBox x:Name="CBCategory"
- Grid.Row="2"
- Margin="400,10,48,109"
- SelectedValuePath="ID"
- SelectedValue="{Binding Path=CategoryID}"/>
-        <TextBlock Grid.Row="1" FontSize="20" Margin="27,109,618,10"><Run 
-Text="ID"/><Run Language="ru-ru" Text=" клиента"/></TextBlock>
-        <TextBlock Grid.Row="2" FontSize="20" Margin="24,10,622,109"><Run 
-Text="ID"/><Run Language="ru-ru" Text=" категории"/></TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Пользователь" Style="{StaticResource LinkTextBlockStyle}"/>
+        <ComboBox x:Name="cmbUser" Grid.Row="0" Grid.Column="1" Margin="5" SelectedValuePath="ID" SelectedItem="{Binding User}" DisplayMemberPath="FIO" Style="{StaticResource ComboBoxStyle}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Категория" Style="{StaticResource LinkTextBlockStyle}"/>
+        <ComboBox x:Name="cmbCategory" Grid.Row="1" Grid.Column="1" Margin="5" SelectedValuePath="ID" SelectedItem="{Binding Category}" DisplayMemberPath="Name" Style="{StaticResource ComboBoxStyle}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата" Style="{StaticResource LinkTextBlockStyle}"/>
+        <DatePicker x:Name="dpDate" Grid.Row="2" Grid.Column="1" Margin="5"
+                    SelectedDate="{Binding CurrentPayment.Date}" Style="{StaticResource DatePickerStyle}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Название" Style="{StaticResource LinkTextBlockStyle}"/>
+        <TextBox x:Name="TBName" Grid.Row="3" Grid.Column="1" Margin="5"
+                 Text="{Binding CurrentPayment.Name}" Style="{StaticResource TextBoxStyle}"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Номер" Style="{StaticResource LinkTextBlockStyle}"/>
+        <TextBox x:Name="TBNum" Grid.Row="4" Grid.Column="1" Margin="5"
+                 Text="{Binding CurrentPayment.Num}" Style="{StaticResource TextBoxStyle}"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Цена" Style="{StaticResource LinkTextBlockStyle}"/>
+        <TextBox x:Name="TBPrice" Grid.Row="5" Grid.Column="1" Margin="5"
+                 Text="{Binding CurrentPayment.Price}" Style="{StaticResource TextBoxStyle}"/>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button x:Name="ButtonClean" Content="Очистить" Click="ButtonClean_Click" Margin="5" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="ButtonSave" Content="Сохранить" Click="ButtonSave_Click" Margin="5" Style="{StaticResource ButtonStyle}"/>
+        </StackPanel>
     </Grid>
 </Page>

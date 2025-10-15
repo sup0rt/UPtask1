@@ -8,19 +8,24 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddCategoryPage" Style="{StaticResource PageStyle}">
 
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="Название категории" Grid.Row="0" FontSize="20" 
-Margin="55,91,319,71" RenderTransformOrigin="0.258,2.273"/>
-        <TextBox x:Name="TBCategoryName" Grid.Row="0"
- Margin="400,94,164,103"
- Text="{Binding Name}" />
-        <Button x:Name="ButtonSaveCategory" Content="Сохранить" 
-Grid.Row="1" Click="ButtonSaveCategory_Click" Margin="249,89,249,101"/>
-        <Button x:Name="ButtonClean" Content="Очистить" Grid.Row="1" 
-Click="ButtonClean_Click" Margin="249,148,249,42"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Название" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox x:Name="TBName" Grid.Row="0" Grid.Column="1" Margin="5" ToolTip="Введите название категории" 
+                 Text="{Binding CurrentCategory.Name, UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click"/>
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click"/>
+        </StackPanel>
     </Grid>
 </Page>

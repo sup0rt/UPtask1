@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using System.Data.Entity; // Для метода Include
+using System.Data.Entity;
 
 namespace UPtask1.Pages
 {
@@ -12,33 +12,23 @@ namespace UPtask1.Pages
         public UsersTabPage()
         {
             InitializeComponent();
-            LoadUsers(); // Загрузка данных при инициализации
+            LoadData();
             this.IsVisibleChanged += Page_IsVisibleChanged;
         }
 
-        private void LoadUsers()
+        private void LoadData()
         {
             try
             {
-                var context = Entities.GetContext();
-                if (context == null)
-                {
-                    MessageBox.Show("Ошибка: Контекст базы данных не инициализирован.");
-                    return;
-                }
-
-                // Загружаем пользователей с их связанными аккаунтами
-                var users = context.User.Include(u => u.Account1).ToList();
-                DataGridUser.ItemsSource = users;
-
-                if (!users.Any())
-                {
-                    MessageBox.Show("Таблица User пуста или данные не загрузились.");
-                }
+                // Загрузка пользователей с данными Account
+                DataGridUser.ItemsSource = Entities.GetContext()
+                    .User
+                    .Include(u => u.Account1)
+                    .ToList();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
 
@@ -48,27 +38,26 @@ namespace UPtask1.Pages
             {
                 try
                 {
-                    var context = Entities.GetContext();
-                    if (context == null)
-                    {
-                        MessageBox.Show("Ошибка: Контекст базы данных не инициализирован.");
-                        return;
-                    }
-
-                    // Обновляем данные в контексте и подгружаем связанные аккаунты
-                    context.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
-                    DataGridUser.ItemsSource = context.User.Include(u => u.Account1).ToList();
+                    Entities.GetContext().ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
+                    LoadData();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при обновлении данных: {ex.Message}");
+                    MessageBox.Show($"Ошибка обновления данных: {ex.Message}");
                 }
             }
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new AddUserPage(null));
+            try
+            {
+                NavigationService?.Navigate(new AddUserPage(null));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка перехода на страницу добавления: {ex.Message}");
+            }
         }
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
@@ -76,45 +65,43 @@ namespace UPtask1.Pages
             var usersForRemoving = DataGridUser.SelectedItems.Cast<User>().ToList();
             if (!usersForRemoving.Any())
             {
-                MessageBox.Show("Выберите хотя бы одну запись для удаления.");
+                MessageBox.Show("Пожалуйста, выберите хотя бы одного пользователя для удаления.", "Предупреждение",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (MessageBox.Show($"Вы точно хотите удалить записи в количестве {usersForRemoving.Count()} элементов?",
-                "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Вы уверены, что хотите удалить {usersForRemoving.Count} пользователя(ей)?",
+                "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try
                 {
-                    var context = Entities.GetContext();
-                    // Удаляем пользователей, но не удаляем связанные аккаунты
-                    context.User.RemoveRange(usersForRemoving);
-                    context.SaveChanges();
-                    MessageBox.Show("Данные успешно удалены!");
-                    LoadUsers(); // Перезагрузка данных после удаления
+                    Entities.GetContext().User.RemoveRange(usersForRemoving);
+                    Entities.GetContext().SaveChanges();
+                    MessageBox.Show("Пользователи успешно удалены!");
+                    LoadData();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при удалении данных: {ex.Message}");
+                    MessageBox.Show($"Ошибка удаления пользователей: {ex.Message}");
                 }
             }
         }
 
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            var selectedUser = (sender as Button)?.DataContext as User;
-            if (selectedUser != null)
+            try
             {
-                NavigationService?.Navigate(new AddUserPage(selectedUser));
+                var button = sender as Button;
+                var user = button?.DataContext as User;
+                if (user != null)
+                {
+                    NavigationService?.Navigate(new AddUserPage(user));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Выберите пользователя для редактирования.");
+                MessageBox.Show($"Ошибка перехода на страницу редактирования: {ex.Message}");
             }
-        }
-
-        private void ButtonBack_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new AdminPage());
         }
     }
 }

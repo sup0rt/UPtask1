@@ -14,25 +14,41 @@
             <RowDefinition Height="73*"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" x:Name="DataGridCategory" 
-AutoGenerateColumns="False" IsReadOnly="True">
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  SelectionMode="Extended"
+                  CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Категория" Binding="{Binding 
-Name}" Width="300"/>
+                <DataGridTextColumn Header="ID" 
+                                  Binding="{Binding ID}" 
+                                  Width="50"/>
+                <DataGridTextColumn Header="Название" 
+                                  Binding="{Binding Name}" 
+                                  Width="200"/>
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="ButtonEdit" Content="Реактировать" 
-ToolTip="Редактировать данные" Click="ButtonEdit_Click"></Button>
+                            <Button x:Name="ButtonEdit" 
+                                   Content="Редактировать" 
+                                   ToolTip="Редактировать данные" 
+                                   Click="ButtonEdit_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="1" x:Name="ButtonAdd" ToolTip="Добавить данные" 
-Content="Добавить" HorizontalAlignment="Left" Click="ButtonAdd_Click" Style="{StaticResource ButtonStyle}"/>
-        <Button Grid.Row="1" x:Name="ButtonDel" ToolTip="Удалить данные" 
-Content="Удалить" HorizontalAlignment="Right" Click="ButtonDel_Click" Style="{StaticResource ButtonStyle}"/>
-        <Button Grid.Row="1" x:Name="ButtonBack" ToolTip="Назад" 
-Content="Назад" HorizontalAlignment="Center"  Click="ButtonBack_Click" Style="{StaticResource ButtonStyle}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                   HorizontalAlignment="Stretch" Margin="10">
+            <Button x:Name="ButtonAdd" 
+                   ToolTip="Добавить данные" 
+                   Content="Добавить" 
+                   Margin="0,0,10,0" 
+                   Click="ButtonAdd_Click"/>
+            <Button x:Name="ButtonDel" 
+                   ToolTip="Удалить данные" 
+                   Content="Удалить" 
+                   HorizontalAlignment="Right" 
+                   Click="ButtonDel_Click"/>
+        </StackPanel>
     </Grid>
 </Page>

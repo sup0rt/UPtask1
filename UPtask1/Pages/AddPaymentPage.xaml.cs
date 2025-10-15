@@ -1,74 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Data.Entity;
+using UPtask1; // Пространство имен контекста
 
 namespace UPtask1.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для AddPaymentPage.xaml
-    /// </summary>
     public partial class AddPaymentPage : Page
     {
         private Payment _currentPayment = new Payment();
-        public AddPaymentPage(Payment selectedPayment)
+
+        public Payment CurrentPayment => _currentPayment;
+
+        public AddPaymentPage(Payment selectedPayment = null)
         {
             InitializeComponent();
-            CBCategory.ItemsSource = Entities.GetContext().Category.ToList();
-            CBCategory.DisplayMemberPath = "Name";
-            CBUser.ItemsSource = Entities.GetContext().User.ToList();
-            CBUser.DisplayMemberPath = "FIO";
             if (selectedPayment != null)
+            {
                 _currentPayment = selectedPayment;
-            DataContext = _currentPayment;
+            }
+            DataContext = this;
+            cmbUser.ItemsSource = Entities.GetContext().User.ToList();
+            cmbCategory.ItemsSource = Entities.GetContext().Category.ToList();
         }
+
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder errors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(_currentPayment.Date.ToString()))
-                errors.AppendLine("Укажите дату!");
-            if (string.IsNullOrWhiteSpace(_currentPayment.Num.ToString()))
-                errors.AppendLine("Укажите количество!");
-            if (string.IsNullOrWhiteSpace(_currentPayment.Price.ToString()))
-                errors.AppendLine("Укажите цену");
-            if (string.IsNullOrWhiteSpace(_currentPayment.UserID.ToString()))
-                errors.AppendLine("Укажите клиента!");
-            if
-           (string.IsNullOrWhiteSpace(_currentPayment.CategoryID.ToString()))
-                errors.AppendLine("Укажите категорию!");
-            if (errors.Length > 0)
+            // Простая проверка на заполненность обязательных полей
+            if (cmbUser.SelectedValue == null || cmbCategory.SelectedValue == null || string.IsNullOrWhiteSpace(TBName.Text))
             {
-                MessageBox.Show(errors.ToString());
+                MessageBox.Show("Заполните все пустые поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (_currentPayment.ID == 0)
-                Entities.GetContext().Payment.Add(_currentPayment);
+
+            // Присвоение значений из интерфейса
+            _currentPayment.UserID = (int?)cmbUser.SelectedValue;
+            _currentPayment.CategoryID = (int?)cmbCategory.SelectedValue;
+            _currentPayment.Name = TBName.Text;
+
+            // Обработка опциональных полей
+            if (int.TryParse(TBNum.Text, out int num)) _currentPayment.Num = num;
+            if (decimal.TryParse(TBPrice.Text, out decimal price)) _currentPayment.Price = price;
+            _currentPayment.Date = dpDate.SelectedDate;
+
             try
             {
-                Entities.GetContext().SaveChanges();
-                MessageBox.Show("Данные успешно сохранены!");
+                var context = Entities.GetContext();
+                if (_currentPayment.ID == 0)
+                    context.Payment.Add(_currentPayment);
+                else
+                    context.Entry(_currentPayment).State = EntityState.Modified;
+
+                context.SaveChanges();
+                MessageBox.Show("Сохранено!", "Успех", MessageBoxButton.OK);
+                NavigationService?.GoBack();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void ButtonClean_Click(object sender, RoutedEventArgs e)
         {
-            TBPaymentName.Text = "";
-            TBAmount.Text = "";
-            TBCount.Text = "";
-            TBDate.Text = "";
+            _currentPayment = new Payment();
+            dpDate.SelectedDate = null;
+            TBName.Text = "";
+            TBNum.Text = "";
+            TBPrice.Text = "";
+            cmbUser.SelectedIndex = -1;
+            cmbCategory.SelectedIndex = -1;
+            DataContext = this;
         }
     }
 }
