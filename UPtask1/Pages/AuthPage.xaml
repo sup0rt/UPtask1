@@ -7,25 +7,60 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Страница авторизации"
-      Style="{StaticResource PageStyle}">
+      Style="{StaticResource PageStyle}"
+      Loaded="Page_Loaded">
 
     <Grid>
-        
-
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <Label Content="Логин" Style="{StaticResource LabelStyle}" />
-            <TextBox x:Name="TbUsername" Style="{StaticResource TextBoxStyle}" />
-            <Label Content="Пароль" Style="{StaticResource LabelStyle}" />
-            <PasswordBox x:Name="PbPassword" Style="{StaticResource PasswordBoxStyle}" />
-            <Button x:Name="btgLogin" Grid.Row="2" Grid.Column="1" Content="Войти" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgLogin_Click" Style="{StaticResource ButtonStyle}" />
-
-            <TextBlock Style="{StaticResource LinkTextBlockStyle}" >
+            <Label x:Name="labelLogin" Content="Логин" HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" Visibility="Visible" />
+            <TextBox x:Name="TbUsername" Style="{StaticResource TextBoxStyle}" Visibility="Visible" />
+            
+            <Label x:Name="labelPass" Content="Пароль" HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" Visibility="Visible" />
+            <PasswordBox x:Name="PbPassword" Style="{StaticResource PasswordBoxStyle}" Visibility="Visible" />
+            <Button x:Name="ButtonEnter" Content="Войти" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btgLogin_Click" Style="{StaticResource ButtonStyle}" Visibility="Visible" />
+            <TextBlock x:Name="RegLink" Style="{StaticResource LinkTextBlockStyle}" Visibility="Visible">
                 Нет аккаунта? 
-                <Hyperlink  TextDecorations="Underline" Click="Hyperlink_Click" Style="{StaticResource HyperlinkStyle}" >
+                <Hyperlink  TextDecorations="Underline" Style="{StaticResource HyperlinkStyle}" Click="Hyperlink_Click">
                     Зарегистрируйтесь
                 </Hyperlink>
             </TextBlock>
-        </StackPanel>
+            <TextBlock x:Name="ChangePasswordLink" Style="{StaticResource LinkTextBlockStyle}" Visibility="Visible">
+                Забыли пароль? 
+                <Hyperlink  TextDecorations="Underline" Style="{StaticResource HyperlinkStyle}" Click="ChangePasswordLink_Click">
+                    Смените пароль
+                </Hyperlink>
+            </TextBlock>
 
+      
+            <Label x:Name="labelCaptcha" Content="Капча:" HorizontalAlignment="Left" Style="{StaticResource LabelStyle}" Visibility="Hidden" />
+            <TextBox x:Name="captcha" 
+                     CommandManager.PreviewExecuted="textBox_PreviewExecuted"
+                     ContextMenu="{x:Null}"
+                     Visibility="Hidden"
+                     Height="42"
+                     Foreground="Red"
+                     FontStyle="Italic"
+                     FontWeight="Heavy"
+                     Width="156"
+                     Background="White"
+                     FontStretch="UltraCondensed"
+                     IsReadOnly="True"
+                     HorizontalContentAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     FontSize="20" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="captchaInput" 
+                     Visibility="Hidden"
+                     Height="34"
+                     TextWrapping="Wrap"
+                     Text=""
+                     Width="160" Style="{StaticResource TextBoxStyle}"/>
+            <Button x:Name="submitCaptcha" 
+                    Visibility="Hidden"
+                    Height="34"
+                    Content="Подтвердить"
+                    ToolTip="Подтвердить ввод капчи"
+                    Width="120"
+                    Click="submitCaptcha_Click" Style="{StaticResource ButtonStyle}" />
+        </StackPanel>
     </Grid>
 </Page>

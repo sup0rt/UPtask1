@@ -24,18 +24,20 @@
         </Grid.ColumnDefinitions>
 
         <!-- Поля для Account -->
-        <TextBlock Text="Логин" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="Логин" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBLogin" Grid.Row="0" Grid.Column="1" Margin="5" ToolTip="Введите логин" 
-                 Text="{Binding CurrentAccount.Login, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding CurrentAccount.Login, UpdateSourceTrigger=PropertyChanged}" 
+                 Style="{StaticResource TextBoxStyle}"/>
 
-        <TextBlock Text="Пароль" Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="Пароль" Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBPass" Grid.Row="1" Grid.Column="1" Margin="5" ToolTip="Введите пароль" 
-                 Text="{Binding CurrentAccount.Password, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding CurrentAccount.Password, UpdateSourceTrigger=PropertyChanged}" 
+                 Style="{StaticResource TextBoxStyle}"/>
 
-        <TextBlock Text="Роль" Grid.Row="2" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="Роль" Grid.Row="2" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <ComboBox x:Name="cmbRole" Grid.Row="2" Grid.Column="1" Margin="5" ToolTip="Выберите роль" 
                   SelectedValue="{Binding CurrentAccount.Role, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedValuePath="Content">
+                  SelectedValuePath="Content" Style="{StaticResource ComboBoxStyle}">
             <ComboBoxItem>Admin</ComboBoxItem>
             <!-- Убрал Content="1", используем только содержимое -->
             <ComboBoxItem>User</ComboBoxItem>
@@ -43,18 +45,18 @@
         </ComboBox>
 
         <!-- Поля для User -->
-        <TextBlock Text="ФИО" Grid.Row="3" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="ФИО" Grid.Row="3" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBFio" Grid.Row="3" Grid.Column="1" Margin="5" ToolTip="Введите ФИО" 
-                 Text="{Binding CurrentUser.FIO, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding CurrentUser.FIO, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}" />
 
-        <TextBlock Text="Фото (необязательно)" Grid.Row="4" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="Фото (необязательно)" Grid.Row="4" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBPhoto" Grid.Row="4" Grid.Column="1" Margin="5" ToolTip="Путь к фото" 
-                 Text="{Binding CurrentUser.Photo, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding CurrentUser.Photo, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}" />
 
         <!-- Кнопки -->
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click"/>
-            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click"/>
+            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click" Style="{StaticResource ButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Page>

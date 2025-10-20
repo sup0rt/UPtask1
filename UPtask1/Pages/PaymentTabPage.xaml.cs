@@ -23,8 +23,8 @@ namespace UPtask1.Pages
                 // Загрузка платежей с данными User и Category
                 DataGridPayment.ItemsSource = Entities.GetContext()
                     .Payment
-                    .Include(p => p.User1)
-                    .Include(p => p.Category1)
+                    .Include(p => p.User)
+                    .Include(p => p.Category)
                     .ToList();
             }
             catch (Exception ex)

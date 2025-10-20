@@ -23,10 +23,10 @@
                                   Binding="{Binding ID}" 
                                   Width="50"/>
                 <DataGridTextColumn Header="Пользователь" 
-                                  Binding="{Binding User1.FIO}" 
+                                  Binding="{Binding User.FIO}" 
                                   Width="150"/>
                 <DataGridTextColumn Header="Категория" 
-                                  Binding="{Binding Category1.Name}" 
+                                  Binding="{Binding Category.Name}" 
                                   Width="150"/>
                 <DataGridTextColumn Header="Дата" 
                                   Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" 
@@ -46,7 +46,8 @@
                             <Button x:Name="ButtonEdit" 
                                    Content="Редактировать" 
                                    ToolTip="Редактировать данные" 
-                                   Click="ButtonEdit_Click"/>
+                                   Click="ButtonEdit_Click"
+                                    Style="{StaticResource ButtonStyle}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

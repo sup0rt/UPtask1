@@ -4,12 +4,44 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UPtask1.Pages"
+      xmlns:charts="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DiagrammPage" Style="{StaticResource PageStyle}">
 
     <Grid>
-        <Button Grid.Row="1" x:Name="ButtonBack" ToolTip="Назад" 
-Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="ButtonBack_Click" Style="{StaticResource ButtonStyle}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock  Text="Пользователь" Style="{StaticResource LinkTextBlockStyle}" />
+                <ComboBox x:Name="cmbUsers" SelectionChanged="cmbUsers_SelectionChanged"  DisplayMemberPath="FIO" SelectedValuePath="ID" SelectedItem="{Binding User}"  />
+            </StackPanel >
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock  Text="Тип диаграммы" Style="{StaticResource LinkTextBlockStyle}" />
+                <ComboBox x:Name="cmbDiagramm" SelectionChanged="cmbDiagramm_SelectionChanged"   />
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="wordBtn" Content="Отобразить в Word" Grid.Row="1" Grid.Column="0" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Click="wordBtn_Click" />
+                <Button x:Name="excelBtn" Content="Отобразить в Excel" Grid.Row="1" Grid.Column="1" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Click="excelBtn_Click" />
+            </StackPanel>
+        </StackPanel>
+        <WindowsFormsHost Margin="30" Grid.Row="1"  Height="Auto" Width="Auto" >
+            <charts:Chart x:Name="ChartPayments">
+                <charts:Chart.Legends>
+                    <charts:Legend>
+
+                    </charts:Legend>
+                </charts:Chart.Legends>
+            </charts:Chart>
+        </WindowsFormsHost>
+
+
+
+
     </Grid>
 </Page>

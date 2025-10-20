@@ -74,5 +74,6 @@ namespace UPtask1.Pages
             cmbCategory.SelectedIndex = -1;
             DataContext = this;
         }
+
     }
 }

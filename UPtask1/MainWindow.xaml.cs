@@ -41,6 +41,12 @@ namespace UPtask1
                     this.Title = "Страница таблицы оплат";
                 else if (pageName == "DiagrammTabPage")
                     this.Title = "Страница диаграмм";
+                else if (pageName == "AddCategoryPage")
+                    this.Title = "Страница управления категориями";
+                else if (pageName == "AddPaymentPage")
+                    this.Title = "Страница управления платежами";
+                else if (pageName == "AddUserPage")
+                    this.Title = "Страница управления пользователями";
                 else
                     this.Title = pageName;
             }
@@ -73,7 +79,7 @@ namespace UPtask1
 
         private void NavigationService_Navigated(object sender, NavigationEventArgs e)
         {
-            btnBack.IsEnabled = MainFrame.CanGoBack; // Включаем/выключаем кнопку в зависимости от возможности возврата
+            btnBack.IsEnabled = MainFrame.CanGoBack; 
         }
     }
 }

@@ -19,13 +19,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Название" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Text="Название" Grid.Row="0" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0,5" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBName" Grid.Row="0" Grid.Column="1" Margin="5" ToolTip="Введите название категории" 
-                 Text="{Binding CurrentCategory.Name, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding CurrentCategory.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}" />
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click"/>
-            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click"/>
+            <Button x:Name="ButtonClean" Content="Очистить" Width="100" Margin="5" Click="ButtonClean_Click" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="ButtonSave" Content="Сохранить" Width="100" Margin="5" Click="ButtonSave_Click" Style="{StaticResource ButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Page>

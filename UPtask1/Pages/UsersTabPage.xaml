@@ -43,7 +43,8 @@
                             <Button x:Name="ButtonEdit" 
                                    Content="Редактировать" 
                                    ToolTip="Редактировать данные" 
-                                   Click="ButtonEdit_Click"/>
+                                   Click="ButtonEdit_Click"
+                                    Style="{StaticResource ButtonStyle}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -55,12 +56,14 @@
                    ToolTip="Добавить данные" 
                    Content="Добавить" 
                    Margin="0,0,10,0" 
-                   Click="ButtonAdd_Click"/>
+                   Click="ButtonAdd_Click"
+                   Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="ButtonDel" 
                    ToolTip="Удалить данные" 
                    Content="Удалить" 
                    HorizontalAlignment="Right" 
-                   Click="ButtonDel_Click"/>
+                   Click="ButtonDel_Click"
+                    Style="{StaticResource ButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Page>

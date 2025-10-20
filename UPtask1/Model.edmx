@@ -31,10 +31,8 @@
           <Property Name="CategoryID" Type="int" />
           <Property Name="Date" Type="date" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Num" Type="int" />
+          <Property Name="Num" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
-          <Property Name="Category" Type="int" />
-          <Property Name="User" Type="int" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -132,12 +130,10 @@
           <Property Name="CategoryID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Num" Type="Int32" />
+          <Property Name="Num" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Category" Type="Int32" />
-          <Property Name="User" Type="Int32" />
-          <NavigationProperty Name="Category1" Relationship="Self.FK__Payment__Categor__4AB81AF0" FromRole="Payment" ToRole="Category" />
-          <NavigationProperty Name="User1" Relationship="Self.FK__Payment__UserID__49C3F6B7" FromRole="Payment" ToRole="User" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Payment__Categor__4AB81AF0" FromRole="Payment" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Payment__UserID__49C3F6B7" FromRole="Payment" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -239,8 +235,6 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Num" ColumnName="Num" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="User" ColumnName="User" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
