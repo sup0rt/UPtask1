@@ -9,7 +9,8 @@
         Height="650" Width="900"
         Loaded="Window_Loaded"
         Closing="Window_Closing" 
-        Title="">
+        Title=""
+        Icon="icon.ico">
     <Grid Background="{DynamicResource PageBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
