@@ -178,7 +178,11 @@ namespace UPtask1.Pages
                 MessageBox.Show("Пользователь с таким логином не найден", "Ошибка");
                 return;
             }
-
+            if (user.Role == 0)
+            {
+                MessageBox.Show("Смена пароля для администраторов запрещена", "Ошибка");
+                return;
+            }
             NavigationService.Navigate(new ChangePasswordPage(user));
         }
     }

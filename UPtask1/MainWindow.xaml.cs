@@ -5,17 +5,45 @@ using System.Windows.Navigation;
 
 namespace UPtask1
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private bool _isDarkTheme = false;
+
         public MainWindow()
         {
             InitializeComponent();
             var frame = (Frame)this.FindName("MainFrame");
             MainFrame.Navigated += Frame_Navigated;
-            MainFrame.NavigationService.Navigated += NavigationService_Navigated; // Отслеживаем навигацию
+            MainFrame.NavigationService.Navigated += NavigationService_Navigated;
+            ApplyTheme(); // Применяем начальную тему
+        }
+
+        private void ApplyTheme()
+        {
+            // Очищаем текущие ресурсы темы, оставляя стили
+            var dictionaries = Application.Current.Resources.MergedDictionaries;
+            for (int i = dictionaries.Count - 1; i >= 0; i--)
+            {
+                var dict = dictionaries[i];
+                if (dict.Source != null && (dict.Source.OriginalString.Contains("LightTheme.xaml") || dict.Source.OriginalString.Contains("DarkTheme.xaml")))
+                {
+                    dictionaries.RemoveAt(i);
+                }
+            }
+
+            // Добавляем нужную тему
+            var themeUri = new Uri(_isDarkTheme ? "DarkTheme.xaml" : "LightTheme.xaml", UriKind.Relative);
+            var themeDictionary = new ResourceDictionary { Source = themeUri };
+            dictionaries.Insert(0, themeDictionary); // Вставляем тему в начало, чтобы она имела приоритет
+
+            // Обновляем эмодзи кнопки
+            btnThemeToggle.Content = _isDarkTheme ? "☀" : "🌙";
+        }
+
+        private void btnThemeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            _isDarkTheme = !_isDarkTheme;
+            ApplyTheme();
         }
 
         private void Frame_Navigated(object sender, NavigationEventArgs e)
@@ -24,7 +52,6 @@ namespace UPtask1
             if (frame.Content is Page page)
             {
                 string pageName = page.GetType().Name;
-
                 if (pageName == "AuthPage")
                     this.Title = "Страница авторизации";
                 else if (pageName == "RegPage")
@@ -61,11 +88,11 @@ namespace UPtask1
             timer.Start();
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show($"Вы уверенны, что хотите выйти из программы?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Вы уверенны, что хотите выйти из программы?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
             {
-                Application.Current.Shutdown();
+                e.Cancel = true;
             }
         }
 
@@ -79,7 +106,7 @@ namespace UPtask1
 
         private void NavigationService_Navigated(object sender, NavigationEventArgs e)
         {
-            btnBack.IsEnabled = MainFrame.CanGoBack; 
+            btnBack.IsEnabled = MainFrame.CanGoBack;
         }
     }
 }

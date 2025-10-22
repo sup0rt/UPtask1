@@ -8,8 +8,9 @@
         mc:Ignorable="d"
         Height="650" Width="900"
         Loaded="Window_Loaded"
+        Closing="Window_Closing" 
         Title="">
-    <Grid>
+    <Grid Background="{DynamicResource PageBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
             <RowDefinition/>
@@ -19,8 +20,8 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnBack" Content="Назад" Style="{StaticResource ButtonStyle}" Click="btnBack_Click" 
                     Margin="5,0" IsEnabled="False" />
-            <Button x:Name="btnExit" Content="Выйти" Style="{StaticResource ButtonStyle}" Click="btnExit_Click" 
-                    Margin="5,0" />
+            <Button x:Name="btnThemeToggle" Content="🌙" Style="{StaticResource ButtonStyle}" Click="btnThemeToggle_Click" 
+                    Margin="5,0" ToolTip="Переключить тему" />
         </StackPanel>
         <Frame x:Name="MainFrame" Grid.Row="1" Source="pages/AuthPage.xaml" NavigationUIVisibility="Hidden" />
         <TextBlock Grid.Row="2" x:Name="tbDateTimeNow" VerticalAlignment="Center" Text="" HorizontalAlignment="Right" 

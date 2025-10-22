@@ -88,7 +88,7 @@ namespace UPtask1.Pages
                 // Initialize Excel application
                 application = new Excel.Application();
                 workbook = application.Workbooks.Add();
-                application.Visible = false; // Make Excel visible (optional)
+                application.Visible = true; // Make Excel visible (optional)
                
                 // Process each user
                 for (int i = 0; i < allUsers.Count; i++)
@@ -330,7 +330,7 @@ namespace UPtask1.Pages
             string fileNamePdf = GetNewFileName(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 $"Расходы пользователя {DateTime.Today.ToString("dd-MM-yyyy")}", ".pdf");
 
-            application.Visible = false;
+            application.Visible = true;
             document.SaveAs2(fileNameDocx);
             document.ExportAsFixedFormat(fileNamePdf, Word.WdExportFormat.wdExportFormatPDF);
 

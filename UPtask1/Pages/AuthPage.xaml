@@ -56,7 +56,7 @@
                      Width="160" Style="{StaticResource TextBoxStyle}"/>
             <Button x:Name="submitCaptcha" 
                     Visibility="Hidden"
-                    Height="34"
+                    Height="40"
                     Content="Подтвердить"
                     ToolTip="Подтвердить ввод капчи"
                     Width="120"

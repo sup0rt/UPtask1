@@ -32,11 +32,7 @@ namespace UPtask1.Pages
             }
 
             
-            if (_user.Role == 0)
-            {
-                MessageBox.Show("Смена пароля для администраторов запрещена", "Ошибка");
-                return;
-            }
+            
 
            
             var context = Entities.GetContext();
