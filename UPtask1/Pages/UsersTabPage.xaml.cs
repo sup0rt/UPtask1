@@ -16,14 +16,28 @@ namespace UPtask1.Pages
             this.IsVisibleChanged += Page_IsVisibleChanged;
         }
 
+        public class UserWithAccount
+        {
+            public User User { get; set; }
+            public Account Account { get; set; }
+        }
+
         private void LoadData()
         {
             try
             {
-                // Загрузка пользователей с данными Account
-                DataGridUser.ItemsSource = Entities.GetContext()
-                    .User
-                    .Include(u => u.Account1)
+                var context = Entities.GetContext();
+
+                // ИСПРАВЛЕНО: Загрузка пользователей с данными аккаунтов
+                DataGridUser.ItemsSource = context.User
+                    .Join(context.Account,
+                          u => u.ID,
+                          a => a.UserID,
+                          (u, a) => new UserWithAccount
+                          {
+                              User = u,
+                              Account = a
+                          })
                     .ToList();
             }
             catch (Exception ex)
@@ -31,7 +45,6 @@ namespace UPtask1.Pages
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
-
         private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (Visibility == Visibility.Visible)
@@ -62,21 +75,31 @@ namespace UPtask1.Pages
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
-            var usersForRemoving = DataGridUser.SelectedItems.Cast<User>().ToList();
-            if (!usersForRemoving.Any())
+            var selectedItems = DataGridUser.SelectedItems.Cast<UserWithAccount>().ToList();
+            if (!selectedItems.Any())
             {
                 MessageBox.Show("Пожалуйста, выберите хотя бы одного пользователя для удаления.", "Предупреждение",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // ИСПРАВЛЕНО: Получаем пользователей из объектов UserWithAccount
+            var usersForRemoving = selectedItems.Select(x => x.User).ToList();
+
             if (MessageBox.Show($"Вы уверены, что хотите удалить {usersForRemoving.Count} пользователя(ей)?",
                 "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try
                 {
-                    Entities.GetContext().User.RemoveRange(usersForRemoving);
-                    Entities.GetContext().SaveChanges();
+                    var context = Entities.GetContext();
+                    var userIds = usersForRemoving.Select(u => u.ID).ToList();
+                    var accountsForRemoving = context.Account
+                        .Where(a => userIds.Contains(a.UserID))
+                        .ToList();
+
+                    context.Account.RemoveRange(accountsForRemoving);
+                    context.User.RemoveRange(usersForRemoving);
+                    context.SaveChanges();
                     MessageBox.Show("Пользователи успешно удалены!");
                     LoadData();
                 }

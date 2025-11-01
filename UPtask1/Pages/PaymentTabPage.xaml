@@ -34,7 +34,7 @@
                 <DataGridTextColumn Header="Название" 
                                   Binding="{Binding Name}" 
                                   Width="150"/>
-                <DataGridTextColumn Header="Номер" 
+                <DataGridTextColumn Header="Количество" 
                                   Binding="{Binding Num}" 
                                   Width="80"/>
                 <DataGridTextColumn Header="Цена" 

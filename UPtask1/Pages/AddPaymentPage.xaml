@@ -38,7 +38,7 @@
         <TextBox x:Name="TBName" Grid.Row="3" Grid.Column="1" Margin="5"
                  Text="{Binding CurrentPayment.Name}" Style="{StaticResource TextBoxStyle}"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Номер" Style="{StaticResource LinkTextBlockStyle}"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Количество" Style="{StaticResource LinkTextBlockStyle}"/>
         <TextBox x:Name="TBNum" Grid.Row="4" Grid.Column="1" Margin="5"
                  Text="{Binding CurrentPayment.Num}" Style="{StaticResource TextBoxStyle}"/>
 

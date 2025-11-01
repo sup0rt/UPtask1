@@ -225,25 +225,25 @@ namespace UPtask1.Pages
             {
                 var user = allUsers[index];
 
-
+                // Заголовок с ФИО пользователя
                 Word.Paragraph userParagraph = document.Paragraphs.Add();
                 Word.Range userRange = userParagraph.Range;
                 userRange.Text = user.FIO;
                 userParagraph.set_Style("Заголовок");
                 userRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
                 userRange.Font.Name = "Times New Roman";
                 userRange.Font.Size = 14;
                 userRange.Font.Bold = 1;
+                userRange.InsertParagraphAfter();
 
-                userRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphJustify;
-
+                // Создание таблицы расходов
                 Word.Paragraph tableParagraph = document.Paragraphs.Add();
                 Word.Range tableRange = tableParagraph.Range;
                 Word.Table paymentsTable = document.Tables.Add(tableRange, allCategories.Count() + 1, 2);
                 paymentsTable.Borders.InsideLineStyle = paymentsTable.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
                 paymentsTable.Range.Cells.VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter;
 
+                // Заголовки таблицы
                 var cellRange = paymentsTable.Cell(1, 1).Range;
                 cellRange.Text = "Категория";
                 cellRange.Font.Name = "Times New Roman";
@@ -258,6 +258,7 @@ namespace UPtask1.Pages
                 cellRange.Bold = 1;
                 cellRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
+                // Заполнение таблицы данными
                 for (int i = 0; i < allCategories.Count(); i++)
                 {
                     var currentCategory = allCategories[i];
@@ -277,19 +278,16 @@ namespace UPtask1.Pages
                     sumCell.Font.Size = 12;
                 }
 
-                if (index != allUsers.Count - 1)
-                {
-                    object breakType = Word.WdBreakType.wdPageBreak;
-                    document.Paragraphs.Last.Range.InsertBreak(ref breakType);
-                }
+                // Добавляем отступ после таблицы
+                document.Paragraphs.Add();
 
+                // Самый дорогой платеж
                 var maxPayment = user.Payment.OrderByDescending(u => u.Price * u.Num).FirstOrDefault();
                 if (maxPayment != null)
                 {
                     Word.Paragraph maxPaymentParagraph = document.Paragraphs.Add();
                     Word.Range maxPaymentRange = maxPaymentParagraph.Range;
-                    maxPaymentRange.Text = $"Самый дорогостоящий платеж - {maxPayment.Name} за {(maxPayment.Price * maxPayment.Num).ToString()} руб. от {maxPayment.Date.ToString()}";
-                    maxPaymentParagraph.set_Style("Подзаголовок");
+                    maxPaymentRange.Text = $"Самый дорогостоящий платеж - {maxPayment.Name} за {(maxPayment.Price * maxPayment.Num).ToString()} руб. от {maxPayment.Date.ToString("dd.MM.yyyy")}";
                     maxPaymentRange.Font.Color = Word.WdColor.wdColorDarkRed;
                     maxPaymentRange.Font.Name = "Times New Roman";
                     maxPaymentRange.Font.Size = 12;
@@ -297,32 +295,50 @@ namespace UPtask1.Pages
                     maxPaymentRange.InsertParagraphAfter();
                 }
 
-
+                // Самый дешевый платеж
                 var minPayment = user.Payment.OrderBy(u => u.Price * u.Num).FirstOrDefault();
                 if (minPayment != null)
                 {
                     Word.Paragraph minPaymentParagraph = document.Paragraphs.Add();
                     Word.Range minPaymentRange = minPaymentParagraph.Range;
-                    minPaymentRange.Text = $"Самый дешевый платеж - {minPayment.Name} за {(minPayment.Price * minPayment.Num).ToString()} руб. от {minPayment.Date.ToString()}";
-                    minPaymentParagraph.set_Style("Подзаголовок");
+                    minPaymentRange.Text = $"Самый дешевый платеж - {minPayment.Name} за {(minPayment.Price * minPayment.Num).ToString()} руб. от {minPayment.Date.ToString("dd.MM.yyyy")}";
                     minPaymentRange.Font.Color = Word.WdColor.wdColorDarkGreen;
                     minPaymentRange.Font.Name = "Times New Roman";
                     minPaymentRange.Font.Size = 12;
                     minPaymentRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
                     minPaymentRange.InsertParagraphAfter();
                 }
+
+                // Разрыв страницы после информации о пользователе (кроме последнего)
+                if (index != allUsers.Count - 1)
+                {
+                    Word.Paragraph breakParagraph = document.Paragraphs.Add();
+                    Word.Range breakRange = breakParagraph.Range;
+                    object breakType = Word.WdBreakType.wdPageBreak;
+                    breakRange.InsertBreak(ref breakType);
+                }
             }
 
+            // Добавление нумерации страниц в футер
             foreach (Word.Section section in document.Sections)
             {
                 Word.HeaderFooter footer = section.Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary];
-                footer.PageNumbers.Add(Word.WdPageNumberAlignment.wdAlignPageNumberCenter);
                 Word.Range footerRange = footer.Range;
-                footerRange.Fields.Add(footerRange, Word.WdFieldType.wdFieldPage);
+
+                // Добавляем номер страницы
                 footerRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                footerRange.Text = "Страница ";
                 footerRange.Font.Size = 10;
                 footerRange.Font.ColorIndex = Word.WdColorIndex.wdBlack;
-                footerRange.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+                // Вставляем поле номера страницы
+                footerRange.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                footerRange.Fields.Add(footerRange, Word.WdFieldType.wdFieldPage);
+
+                // Добавляем дату
+                footerRange.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                footerRange.Text = " | " + DateTime.Now.ToString("dd.MM.yyyy");
+                footerRange.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             }
 
             string fileNameDocx = GetNewFileName(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -333,10 +349,6 @@ namespace UPtask1.Pages
             application.Visible = true;
             document.SaveAs2(fileNameDocx);
             document.ExportAsFixedFormat(fileNamePdf, Word.WdExportFormat.wdExportFormatPDF);
-
- 
-            document.Close();
-            application.Quit();
 
             MessageBox.Show("Отчеты сохранены на рабочем столе");
         }

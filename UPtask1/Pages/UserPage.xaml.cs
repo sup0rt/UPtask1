@@ -46,9 +46,13 @@ namespace UPtask1.Pages
                 }
                 if (cbAdminOnly.IsChecked.Value)
                 {
-                    List<int> accountIds = Entities.GetContext().Account.Where(a => a.Role == 0).Select(a => a.ID).ToList();
+                    List<int> adminUserIds = Entities.GetContext().Account
+                    .Where(a => a.Role == 0)
+                    .Select(a => a.UserID)
+                    .ToList();
+
                     selectedUsers = selectedUsers.Where(su =>
-                    accountIds.Contains(su.Account.Value)
+                        adminUserIds.Contains(su.ID)  
                     ).ToList();
                 }
                 ListUser.ItemsSource = (cmbSort.SelectedIndex == 0) ? selectedUsers.OrderBy(su => su.FIO).ToList() : selectedUsers.OrderByDescending(su => su.FIO).ToList();

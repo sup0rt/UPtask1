@@ -36,14 +36,14 @@ namespace UPtask1.Pages
             }
 
             // Присвоение значений из интерфейса
-            _currentPayment.UserID = (int?)cmbUser.SelectedValue;
-            _currentPayment.CategoryID = (int?)cmbCategory.SelectedValue;
+            _currentPayment.UserID = (int)cmbUser.SelectedValue;
+            _currentPayment.CategoryID = (int)cmbCategory.SelectedValue;
             _currentPayment.Name = TBName.Text;
 
             // Обработка опциональных полей
             if (int.TryParse(TBNum.Text, out int num)) _currentPayment.Num = num;
             if (decimal.TryParse(TBPrice.Text, out decimal price)) _currentPayment.Price = price;
-            _currentPayment.Date = dpDate.SelectedDate;
+            _currentPayment.Date = dpDate.SelectedDate.Value;
 
             try
             {

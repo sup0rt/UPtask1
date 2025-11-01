@@ -20,22 +20,22 @@
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
-                                  Binding="{Binding ID}" 
+                                  Binding="{Binding User.ID}" 
                                   Width="50"/>
                 <DataGridTextColumn Header="ФИО" 
-                                  Binding="{Binding FIO}" 
+                                  Binding="{Binding User.FIO}" 
                                   Width="200"/>
                 <DataGridTextColumn Header="Фото" 
-                                  Binding="{Binding Photo}" 
+                                  Binding="{Binding User.Photo}" 
                                   Width="150"/>
                 <DataGridTextColumn Header="Логин" 
-                                  Binding="{Binding Account1.Login}" 
+                                  Binding="{Binding Account.Login}" 
                                   Width="100"/>
                 <DataGridTextColumn Header="Пароль" 
-                                  Binding="{Binding Account1.Password}" 
+                                  Binding="{Binding Account.Password}" 
                                   Width="100"/>
                 <DataGridTextColumn Header="Роль" 
-                                  Binding="{Binding Account1.Role}" 
+                                  Binding="{Binding Account.Role}" 
                                   Width="80"/>
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>

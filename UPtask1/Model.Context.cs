@@ -19,6 +19,7 @@ namespace UPtask1
             : base("name=Entities")
         {
         }
+
         private static Entities _context;
         public static Entities GetContext()
         {
@@ -28,6 +29,7 @@ namespace UPtask1
             }
             return _context;
         }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

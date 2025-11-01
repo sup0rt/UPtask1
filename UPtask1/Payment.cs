@@ -15,12 +15,12 @@ namespace UPtask1
     public partial class Payment
     {
         public int ID { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public Nullable<int> CategoryID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public int UserID { get; set; }
+        public int CategoryID { get; set; }
+        public System.DateTime Date { get; set; }
         public string Name { get; set; }
-        public Nullable<decimal> Num { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public decimal Num { get; set; }
+        public decimal Price { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }

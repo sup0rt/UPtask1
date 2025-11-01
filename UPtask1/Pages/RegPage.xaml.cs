@@ -30,7 +30,7 @@ namespace UPtask1.Pages
 
         private User _user = new User();
         private Account _userAccount = new Account();
-        
+
 
         private void Registrate()
         {
@@ -77,19 +77,18 @@ namespace UPtask1.Pages
             {
                 var context = Entities.GetContext();
 
+                _user.FIO = TbFullname.Text;
+                context.User.Add(_user);
+                context.SaveChanges(); 
+
                 _userAccount.Login = TbUsername.Text;
-                _userAccount.Role = 1;
+                _userAccount.Role = 2;
                 _userAccount.Password = PasswordHasher.CreateHash(PbPassword.Password, out string salt);
                 _userAccount.Salt = salt;
+                _userAccount.UserID = _user.ID; 
                 context.Account.Add(_userAccount);
                 context.SaveChanges();
 
-                _user.FIO = TbFullname.Text;              
-                _user.Account = _userAccount.ID;
-                context.User.Add(_user);
-                context.SaveChanges();
-                
-                
                 MessageBox.Show("Вы зарегистрировались", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 NavigationService.Navigate(new UserPage(_userAccount));
             }

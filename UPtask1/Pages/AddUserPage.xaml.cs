@@ -22,18 +22,17 @@ namespace UPtask1.Pages
             if (selectedUser != null)
             {
                 _currentUser = Entities.GetContext().User
-                    .Include(u => u.Account1)
                     .FirstOrDefault(u => u.ID == selectedUser.ID) ?? selectedUser;
+
+                // ИЗМЕНЕНО: Загружаем связанный аккаунт через UserID
+                _currentAccount = Entities.GetContext().Account
+                    .FirstOrDefault(a => a.UserID == _currentUser.ID) ?? new Account();
             }
             else
             {
                 _currentUser = new User();
                 _currentAccount = new Account();
-                _currentUser.Account1 = _currentAccount;
             }
-
-            _currentAccount = _currentUser.Account1 ?? new Account();
-            _currentUser.Account1 = _currentAccount;
 
             DataContext = this;
         }
@@ -45,20 +44,16 @@ namespace UPtask1.Pages
             // Валидация Account
             if (string.IsNullOrWhiteSpace(_currentAccount.Login))
                 errors.AppendLine("Укажите логин!");
-            if (string.IsNullOrWhiteSpace(_currentAccount.Password))
+            if (string.IsNullOrWhiteSpace(TBPass.Text))
                 errors.AppendLine("Укажите пароль!");
-            if (_currentAccount.Role == null)
+            var selectedRole = cmbRole.SelectedItem as ComboBoxItem;
+            if (selectedRole != null)
             {
-                // Преобразуем выбранную роль в int (например, Admin = 1, User = 2)
-                var selectedRole = cmbRole.SelectedItem as ComboBoxItem;
-                if (selectedRole != null)
-                {
-                    _currentAccount.Role = selectedRole.Content.ToString() == "Admin" ? 1 : 2;
-                }
-                else
-                {
-                    errors.AppendLine("Выберите роль!");
-                }
+                _currentAccount.Role = selectedRole.Content.ToString() == "Admin" ? 1 : 2;
+            }
+            else
+            {
+                errors.AppendLine("Выберите роль!");
             }
 
             // Валидация User
@@ -74,18 +69,46 @@ namespace UPtask1.Pages
             try
             {
                 var context = Entities.GetContext();
-                _currentAccount.Password = PasswordHasher.CreateHash(TBPass.Text, out string salt);
-                _currentAccount.Salt = salt;
+
+                // Хешируем пароль только если он был изменен
+                if (!string.IsNullOrWhiteSpace(TBPass.Text))
+                {
+                    _currentAccount.Password = PasswordHasher.CreateHash(TBPass.Text, out string salt);
+                    _currentAccount.Salt = salt;
+                }
 
                 if (_currentUser.ID == 0)
                 {
-                    context.Account.Add(_currentAccount);
+                    // ИЗМЕНЕНО: Сначала создаем пользователя
                     context.User.Add(_currentUser);
+                    context.SaveChanges(); // Сохраняем, чтобы получить ID пользователя
+
+                    // Затем создаем аккаунт с ссылкой на UserID
+                    _currentAccount.UserID = _currentUser.ID;
+                    context.Account.Add(_currentAccount);
                 }
                 else
                 {
-                    context.Entry(_currentAccount).State = EntityState.Modified;
+                    // ИЗМЕНЕНО: Обновляем пользователя и аккаунт отдельно
                     context.Entry(_currentUser).State = EntityState.Modified;
+
+                    // Для аккаунта проверяем, существует ли он уже
+                    var existingAccount = context.Account.FirstOrDefault(a => a.UserID == _currentUser.ID);
+                    if (existingAccount != null)
+                    {
+                        // Обновляем существующий аккаунт
+                        existingAccount.Login = _currentAccount.Login;
+                        existingAccount.Password = _currentAccount.Password;
+                        existingAccount.Salt = _currentAccount.Salt;
+                        existingAccount.Role = _currentAccount.Role;
+                        context.Entry(existingAccount).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        // Создаем новый аккаунт
+                        _currentAccount.UserID = _currentUser.ID;
+                        context.Account.Add(_currentAccount);
+                    }
                 }
 
                 context.SaveChanges();
@@ -108,7 +131,6 @@ namespace UPtask1.Pages
 
             _currentAccount.Login = "";
             _currentAccount.Password = "";
-            _currentAccount.Role = null;
             _currentUser.FIO = "";
             _currentUser.Photo = "";
         }

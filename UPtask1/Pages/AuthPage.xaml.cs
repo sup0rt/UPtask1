@@ -61,12 +61,12 @@ namespace UPtask1.Pages
 
             TbUsername.Clear();
             PbPassword.Clear();
-            if (user.Role == 1)
+            if (user.Role == 2)
             {
                 MessageBox.Show("Добро пожаловать!");
                 NavigationService.Navigate(new UserPage(user));
             }
-            else if (user.Role == 0)
+            else if (user.Role == 1)
             {
                 MessageBox.Show("Добро пожаловать!");
                 NavigationService.Navigate(new AdminPage());
@@ -178,7 +178,7 @@ namespace UPtask1.Pages
                 MessageBox.Show("Пользователь с таким логином не найден", "Ошибка");
                 return;
             }
-            if (user.Role == 0)
+            if (user.Role == 1)
             {
                 MessageBox.Show("Смена пароля для администраторов запрещена", "Ошибка");
                 return;
